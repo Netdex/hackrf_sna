@@ -8,12 +8,20 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 	-DGLFW_INCLUDE_NONE
 	-DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\"
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad imgui spdlog span-lite toml11 implot)
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    glfw glad imgui implot 
+    spdlog span-lite toml11 
+    hackrf
+)
+if(WIN32)
+    # These dependencies are just for copying DLLs on Windows
+    add_dependencies(${PROJECT_NAME} libusb-win32 pthreads-win32)
+endif()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/res"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+        "${PROJECT_SOURCE_DIR}/res/"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/res/")
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE "/experimental:external" "/external:W0" "/external:anglebrackets" "/W4" "/WX")
