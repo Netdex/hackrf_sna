@@ -1,5 +1,7 @@
 # hackrf_sna
 
+![CMake](https://github.com/Netdex/hackrf_sna/workflows/CMake/badge.svg)
+
 `This project is a work-in-progress.`
 
 Scalar network analyzer using a mix and match of the following components:
