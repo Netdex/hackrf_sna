@@ -56,7 +56,7 @@ jobs:
       
     - name: Package Artifacts (ubuntu-only)
       if: contains(matrix.os, 'ubuntu')
-      run: tar -zcvf hackrf_sna-ubuntu-latest.tar.gz ${{runner.workspace}}/build/hackrf_sna/*
+      run: tar -zcvf hackrf_sna-ubuntu-latest.tar.gz -C ${{runner.workspace}}/build/hackrf_sna .
       
     - name: Package Artifacts (windows-only)
       if: contains(matrix.os, 'windows')
@@ -74,6 +74,7 @@ jobs:
         prerelease: true
 
     - name: Upload Release Asset (ubuntu-only)
+      if: contains(matrix.os, 'ubuntu')
       id: upload-release-asset-ubuntu 
       uses: actions/upload-release-asset@v1
       env:
@@ -85,6 +86,7 @@ jobs:
         asset_content_type: application/gzip
         
     - name: Upload Release Asset (windows-only)
+      if: contains(matrix.os, 'windows')
       id: upload-release-asset-windows 
       uses: actions/upload-release-asset@v1
       env:
