@@ -10,7 +10,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     glfw glad imgui implot 
-    glog span-lite toml11 
+    glog span-lite toml11 cppzmq
     hackrf
 )
 if(WIN32)

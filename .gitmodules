@@ -22,3 +22,9 @@
 [submodule "vendor/imgui"]
 	path = vendor/imgui
 	url = https://github.com/Netdex/imgui.git
+[submodule "vendor/cppzmq"]
+	path = vendor/cppzmq
+	url = https://github.com/zeromq/cppzmq.git
+[submodule "vendor/libzmq"]
+	path = vendor/libzmq
+	url = https://github.com/zeromq/libzmq.git

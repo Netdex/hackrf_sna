@@ -6,7 +6,7 @@ set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "" )
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "")
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "")
 set(GLFW_INSTALL OFF CACHE INTERNAL "")
-add_subdirectory(glfw glfw)
+add_subdirectory(glfw)
 target_include_directories(glfw SYSTEM PUBLIC glfw/include/)
 
 # glad
@@ -48,6 +48,16 @@ add_library(implot
 target_include_directories(implot SYSTEM PUBLIC implot/)
 target_link_libraries(implot PUBLIC imgui)
 
+# cppzmq
+set(CPPZMQ_BUILD_TESTS OFF CACHE INTERNAL "")   # my builds take long enough already tyvm
+set(ZMQ_BUILD_TESTS OFF CACHE INTERNAL "")      # can we PLEASE standardize a way to enable ctests
+set(ENABLE_DRAFTS OFF CACHE INTERNAL "")        # we're not using websockets
+set(ENABLE_CURVE OFF CACHE INTERNAL "")         # we don't need ECC for local message passing
+set(WITH_DOCS OFF CACHE INTERNAL "")            # no thanks
+set(WITH_PERF_TOOL OFF CACHE INTERNAL "")       # いらない
+add_subdirectory(libzmq)
+add_subdirectory(cppzmq)
+
 # hackrf
 if(WIN32)
     set(LIBUSB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/include/libusb-1.0)
@@ -60,12 +70,10 @@ if(WIN32)
         set(THREADS_PTHREADS_WIN32_LIBRARY ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/lib/x64/pthreadVC2.lib)
     endif()
 endif()
-add_subdirectory(hackrf/host/libhackrf libhackrf)
+add_subdirectory(hackrf/host/libhackrf)
 target_include_directories(hackrf SYSTEM PUBLIC hackrf/host/libhackrf/src/)
 
-# libusb-win32
-# pthreads-win32
-# - Dummy targets for copying DLLs on Windows
+# Dummy targets for copying DLLs on Windows
 if(WIN32)
     add_custom_target(libusb-win32)
     add_custom_target(pthreads-win32)
