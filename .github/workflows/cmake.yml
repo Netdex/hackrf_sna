@@ -54,51 +54,21 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C $BUILD_TYPE
       
-    - name: Package Artifacts (ubuntu-only)
-      if: contains(matrix.os, 'ubuntu')
-      run: tar -zcvf hackrf_sna-${{ matrix.os }}.tar.gz -C ${{runner.workspace}}/build/hackrf_sna .
-      
-    - name: Package Artifacts (windows-only)
-      if: contains(matrix.os, 'windows')
-      run: 7z a hackrf_sna-${{ matrix.os }}.zip "${{runner.workspace}}/build/hackrf_sna/Release/*"
-      
     - name: Get Commit Hash
       id: commit-hash
       shell: bash
       run: |
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.commit-hash.outputs.sha_short }}
-        release_name: Release ${{ steps.commit-hash.outputs.sha_short }}
-        draft: false
-        prerelease: true
-
-    - name: Upload Release Asset (ubuntu-only)
+    - uses: actions/upload-artifact@v2
       if: contains(matrix.os, 'ubuntu')
-      id: upload-release-asset-ubuntu 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hackrf_sna-${{ matrix.os }}.tar.gz
-        asset_name: hackrf_sna-${{ matrix.os }}.tar.gz
-        asset_content_type: application/gzip
-        
-    - name: Upload Release Asset (windows-only)
+        name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}
+        path: ${{runner.workspace}}/build/hackrf_sna/
+   
+    - uses: actions/upload-artifact@v2
       if: contains(matrix.os, 'windows')
-      id: upload-release-asset-windows 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hackrf_sna-${{ matrix.os }}.zip
-        asset_name: hackrf_sna-${{ matrix.os }}.zip
-        asset_content_type: application/zip
+        name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}
+        path: ${{runner.workspace}}/build/hackrf_sna/Release/
+   
