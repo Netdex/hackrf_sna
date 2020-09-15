@@ -27,7 +27,8 @@ if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE "/experimental:external" "/external:W0" "/external:anglebrackets" "/W4" "/WX")
 	target_link_options(${PROJECT_NAME} PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:/INCREMENTAL:NO>" "$<$<CONFIG:RELWITHDEBINFO>:/PROFILE>")
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE "-Wall" "-Wextra" "-Werror" "$<$<CONFIG:RELEASE>:-O3>" "$<$<CONFIG:DEBUG>:-g>")
+    # glog emits some dumb warnings so we have to do this
+    set_source_file_properties(${PROJECT_SOURCES} PROPERTIES COMPILE_FLAGS "-Wall" "-Wextra" "-Werror")
 endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
