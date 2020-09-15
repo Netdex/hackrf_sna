@@ -1,6 +1,6 @@
 # hackrf_sna
 
-![CMake](https://github.com/Netdex/hackrf_sna/workflows/CMake/badge.svg)
+[![CMake](https://github.com/Netdex/hackrf_sna/workflows/CMake/badge.svg)](https://github.com/Netdex/hackrf_sna/actions?query=workflow%3ACMake)
 
 `This project is a work-in-progress.`
 
