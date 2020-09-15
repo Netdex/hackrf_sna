@@ -1,15 +1,9 @@
 [submodule "vendor/toml11"]
 	path = vendor/toml11
 	url = https://github.com/ToruNiina/toml11.git
-[submodule "vendor/spdlog"]
-	path = vendor/spdlog
-	url = https://github.com/gabime/spdlog.git
 [submodule "vendor/span-lite"]
 	path = vendor/span-lite
 	url = https://github.com/martinmoene/span-lite.git
-[submodule "vendor/imgui"]
-	path = vendor/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "vendor/glad"]
 	path = vendor/glad
 	url = https://github.com/Dav1dde/glad.git
@@ -22,3 +16,9 @@
 [submodule "vendor/hackrf"]
 	path = vendor/hackrf
 	url = https://github.com/mossmann/hackrf.git
+[submodule "vendor/glog"]
+	path = vendor/glog
+	url = https://github.com/google/glog.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/Netdex/imgui.git

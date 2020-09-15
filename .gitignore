@@ -3,8 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+imgui.ini
+hackrf_sna.toml
+
 # CMake
 /build
+/out
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -23,7 +27,6 @@ _deps
 *.user
 *.userosscache
 *.sln.docstates
-imgui.ini
 .vscode
 
 # User-specific files (MonoDevelop/Xamarin Studio)
