@@ -75,6 +75,7 @@ jobs:
         path: ${{runner.workspace}}/build/hackrf_sna/Release/
         
     - name: Create Release
+      if: contains(matrix.os, 'windows')
       id: create_release
       uses: actions/create-release@v1
       env:
