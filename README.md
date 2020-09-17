@@ -29,9 +29,8 @@ I have none of those, so I'll leave that for the future.
 - Antenna analysis using RF Bridge/return loss bridge/directional coupler
 
 ## Build
-This project builds `libhackrf` as a dependency. On Linux, you will need its dependencies installed on your system. Namely,
-- libusb
-- pthreads
+This project builds `libhackrf` as a dependency. On Linux, you will need its dependencies installed on your system. 
+For the exact list of dependencies required, see the [CI configuration](https://github.com/Netdex/hackrf_sna/blob/master/.github/workflows/cmake.yml). 
 
 On Windows, these libraries are prebuilt and included in the project. See [hackrf/Operating System Tips](https://github.com/mossmann/hackrf/wiki/Operating-System-Tips) for more details.
 
