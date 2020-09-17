@@ -60,15 +60,40 @@ jobs:
       run: |
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
-    - uses: actions/upload-artifact@v2
+    - name: Upload Artifact (ubuntu-only)
+      uses: actions/upload-artifact@v2
       if: contains(matrix.os, 'ubuntu')
       with:
         name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}
         path: ${{runner.workspace}}/build/hackrf_sna/
-   
-    - uses: actions/upload-artifact@v2
+
+    - name: Upload Artifact (windows-only)
+      uses: actions/upload-artifact@v2
       if: contains(matrix.os, 'windows')
       with:
         name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}
         path: ${{runner.workspace}}/build/hackrf_sna/Release/
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.commit-hash.outputs.sha_short }}
+        release_name: Build ${{ steps.commit-hash.outputs.sha_short }}
+        draft: false
+        prerelease: true
+        
+    - name: Upload Release Asset (windows-only)
+      if: contains(matrix.os, 'windows')
+      id: upload-release-asset-windows 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./hackrf_sna-${{ matrix.os }}.zip
+        asset_name: hackrf_sna-${{ matrix.os }}.zip
+        asset_content_type: application/zip
    
