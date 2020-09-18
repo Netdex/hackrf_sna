@@ -86,6 +86,10 @@ jobs:
         draft: false
         prerelease: true
         
+    - name: Package Artifacts (windows-only)
+      if: contains(matrix.os, 'windows')
+      run: 7z a hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}.zip "${{runner.workspace}}/build/hackrf_sna/Release/*"        
+    
     - name: Upload Release Asset (windows-only)
       if: contains(matrix.os, 'windows')
       id: upload-release-asset-windows 
