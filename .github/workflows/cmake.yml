@@ -73,32 +73,5 @@ jobs:
       with:
         name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}
         path: ${{runner.workspace}}/build/hackrf_sna/Release/
-        
-    - name: Create Release (windows-only)
-      if: contains(matrix.os, 'windows')
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.commit-hash.outputs.sha_short }}
-        release_name: Build ${{ steps.commit-hash.outputs.sha_short }}
-        draft: false
-        prerelease: true
-        
-    - name: Package Artifacts (windows-only)
-      if: contains(matrix.os, 'windows')
-      run: 7z a hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}.zip "${{runner.workspace}}/build/hackrf_sna/Release/*"        
-    
-    - name: Upload Release Asset (windows-only)
-      if: contains(matrix.os, 'windows')
-      id: upload-release-asset-windows 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}.zip
-        asset_name: hackrf_sna-${{ matrix.os }}-${{ steps.commit-hash.outputs.sha_short }}.zip
-        asset_content_type: application/zip
+
    
