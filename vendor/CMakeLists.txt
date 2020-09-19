@@ -1,6 +1,8 @@
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
+set(VENDOR_DIR ${PROJECT_SOURCE_DIR}/vendor)
+
 # glfw
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "" )
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "")
@@ -58,42 +60,12 @@ set(WITH_PERF_TOOL OFF CACHE INTERNAL "")       # いらない
 add_subdirectory(libzmq)
 add_subdirectory(cppzmq)
 
-# hackrf
+# SoapySDR
 if(WIN32)
-    set(LIBUSB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/include/libusb-1.0)
-    set(THREADS_PTHREADS_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/include)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(LIBUSB_LIBRARIES ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/MS32/dll/libusb-1.0.lib)
-        set(THREADS_PTHREADS_WIN32_LIBRARY ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/lib/x86/pthreadVC2.lib)
-    elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(LIBUSB_LIBRARIES ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/MS64/dll/libusb-1.0.lib)
-        set(THREADS_PTHREADS_WIN32_LIBRARY ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/lib/x64/pthreadVC2.lib)
-    endif()
+# Set common path of PothosSDR for locating SoapySDR on Windows
+set(POTHOS_SDR_ROOT "C:/Program Files/PothosSDR" CACHE STRING "")
+set(POTHOS_SDR_INCLUDE ${POTHOS_SDR_ROOT}/include CACHE INTERNAL "")
+set(POTHOS_SDR_LIB ${POTHOS_SDR_ROOT}/lib CACHE INTERNAL "")
+set(SoapySDR_DIR ${POTHOS_SDR_ROOT}/cmake CACHE INTERNAL "")
 endif()
-add_subdirectory(hackrf/host/libhackrf)
-target_include_directories(hackrf SYSTEM PUBLIC hackrf/host/libhackrf/src/)
-
-# Dummy targets for copying DLLs on Windows
-if(WIN32)
-    add_custom_target(libusb-win32)
-    add_custom_target(pthreads-win32)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        add_custom_command(TARGET libusb-win32 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/MS32/dll/libusb-1.0.dll
-                "$<TARGET_FILE_DIR:hackrf>")
-        add_custom_command(TARGET pthreads-win32 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/dll/x32/pthreadVC2.dll
-                "$<TARGET_FILE_DIR:hackrf>")
-    elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-        add_custom_command(TARGET libusb-win32 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${PROJECT_SOURCE_DIR}/vendor/libusb-1.0.23-win32/MS64/dll/libusb-1.0.dll
-                "$<TARGET_FILE_DIR:hackrf>")
-        add_custom_command(TARGET pthreads-win32 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${PROJECT_SOURCE_DIR}/vendor/pthreads-2.9.1-win32/dll/x64/pthreadVC2.dll
-                "$<TARGET_FILE_DIR:hackrf>")
-    endif()
-endif()
+find_package(SoapySDR "0.8" CONFIG REQUIRED)

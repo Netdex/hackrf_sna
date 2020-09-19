@@ -5,5 +5,5 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(BUILD_TESTING OFF CACHE BOOL "")
 
-add_subdirectory(src)
 add_subdirectory(vendor)
+add_subdirectory(src)

@@ -1,6 +1,7 @@
 file(GLOB_RECURSE PROJECT_HEADERS *.hpp)
 file(GLOB_RECURSE PROJECT_SOURCES *.cpp)
 
+link_directories(${POTHOS_SDR_LIB}) # SoapySDRConfig doesn't add absolute path for Windows
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -11,12 +12,8 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     glfw glad imgui implot 
     glog span-lite toml11 cppzmq
-    hackrf
+    SoapySDR
 )
-if(WIN32)
-    # These dependencies are just for copying DLLs on Windows
-    add_dependencies(${PROJECT_NAME} libusb-win32 pthreads-win32)
-endif()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -13,9 +13,6 @@
 [submodule "vendor/implot"]
 	path = vendor/implot
 	url = https://github.com/epezent/implot.git
-[submodule "vendor/hackrf"]
-	path = vendor/hackrf
-	url = https://github.com/mossmann/hackrf.git
 [submodule "vendor/glog"]
 	path = vendor/glog
 	url = https://github.com/google/glog.git

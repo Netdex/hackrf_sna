@@ -1,7 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glog/logging.h>
-#include <hackrf.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -20,8 +19,8 @@ int main(int, char* argv[]) {
 
   auto& config = sna::GetConfig();
 
-  hackrf_error ret = static_cast<hackrf_error>(hackrf_init());
-  CHECK_EQ(hackrf_init(), HACKRF_SUCCESS) << hackrf_error_name(ret);
+  // hackrf_error ret = static_cast<hackrf_error>(hackrf_init());
+  // CHECK_EQ(hackrf_init(), HACKRF_SUCCESS) << hackrf_error_name(ret);
 
   // Setup window
   glfwSetErrorCallback(glfw_error_callback);
