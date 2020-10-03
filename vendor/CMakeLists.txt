@@ -69,3 +69,9 @@ set(POTHOS_SDR_LIB ${POTHOS_SDR_ROOT}/lib CACHE INTERNAL "")
 set(SoapySDR_DIR ${POTHOS_SDR_ROOT}/cmake CACHE INTERNAL "")
 endif()
 find_package(SoapySDR "0.4.0" CONFIG REQUIRED)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    glfw glad imgui implot 
+    glog span-lite toml11 cppzmq
+    SoapySDR
+)
