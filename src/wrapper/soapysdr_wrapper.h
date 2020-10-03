@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SoapySDR/Device.hpp>
+#include <memory>
 
 namespace sna::wrapper {
 
