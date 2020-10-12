@@ -6,6 +6,7 @@
 #include <imgui_impl_opengl3.h>
 #include <implot.h>
 
+#include "gui/sdr_picker.h"
 #include "util/config.h"
 
 static void glfw_error_callback(int error, const char* description) {
@@ -14,13 +15,11 @@ static void glfw_error_callback(int error, const char* description) {
 
 int main(int, char* argv[]) {
   google::InitGoogleLogging(argv[0]);
+  google::InstallFailureSignalHandler();
   FLAGS_logtostderr = true;
   FLAGS_minloglevel = 0;
 
   auto& config = sna::GetConfig();
-
-  // hackrf_error ret = static_cast<hackrf_error>(hackrf_init());
-  // CHECK_EQ(hackrf_init(), HACKRF_SUCCESS) << hackrf_error_name(ret);
 
   // Setup window
   glfwSetErrorCallback(glfw_error_callback);
@@ -95,6 +94,8 @@ int main(int, char* argv[]) {
   bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+  sna::SdrPicker base;
+
   // Main loop
   while (!glfwWindowShouldClose(window)) {
     // Poll and handle events (inputs, window resize, etc.)
@@ -116,14 +117,15 @@ int main(int, char* argv[]) {
     // 1. Show the big demo window (Most of the sample code is in
     // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
     // ImGui!).
-    if (show_demo_window)
+    if (show_demo_window) {
       ImGui::ShowDemoWindow(&show_demo_window);
+      ImPlot::ShowDemoWindow(&show_demo_window);
+    }
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair
     // to created a named window.
     {
       static float f = 0.0f;
-      static int counter = 0;
 
       ImGui::Begin("Hello, world!");  // Create a window called "Hello, world!"
                                       // and append into it.
@@ -142,12 +144,12 @@ int main(int, char* argv[]) {
           "clear color",
           (float*)&clear_color);  // Edit 3 floats representing a color
 
-      if (ImGui::Button(
-              "Button"))  // Buttons return true when clicked (most widgets
-                          // return true when edited/activated)
-        counter++;
+      if (ImGui::Button("Button")) {
+        base.ShowModal();
+      }
+      base.Process();
+
       ImGui::SameLine();
-      ImGui::Text("counter = %d", counter);
 
       ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                   1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -166,8 +168,6 @@ int main(int, char* argv[]) {
         show_another_window = false;
       ImGui::End();
     }
-
-    ImPlot::ShowDemoWindow();
 
     // Rendering
     ImGui::Render();

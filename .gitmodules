@@ -25,3 +25,6 @@
 [submodule "vendor/libzmq"]
 	path = vendor/libzmq
 	url = https://github.com/zeromq/libzmq.git
+[submodule "vendor/eventpp"]
+	path = vendor/eventpp
+	url = https://github.com/wqking/eventpp.git

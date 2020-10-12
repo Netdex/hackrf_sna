@@ -28,8 +28,28 @@ I have none of those, so I'll leave that for the future.
 
 - Antenna analysis using RF Bridge/return loss bridge/directional coupler
 
+## Known Issues
+### Debug build crashes on startup
+SoapySDR has ABI incompatibility on Windows between Debug and Release builds.
+Since your PothosSDR release was probably built in Release mode, you must
+build this project with RelWithDebInfo or Release modes, or build SoapySDR in
+Debug mode.
+
+### Program crashes intermittently during device enumeration
+It seems like [at least one of the SoapySDR modules is
+buggy](https://github.com/pothosware/SoapyRTLSDR/issues/38). My guess is that
+there is some contention with LibUSB between multiple support modules. A
+stopgap measure is to disable all modules you do not need, you can do this on
+Windows by going to `C:\Program Files\PothosSDR\lib\SoapySDR\modules0.8` and
+deleting/moving DLLs which are not necessary for your setup.
+
 ## Build
-This project requires [PothosSDR](https://github.com/pothosware/PothosCore/wiki/Downloads) installed on your machine, which provides support libraries for various SDR hardware and SoapySDR. For the exact list of dependencies required, see the [CI configuration](https://github.com/Netdex/hackrf_sna/blob/master/.github/workflows/cmake.yml). 
+This project requires
+[PothosSDR](https://github.com/pothosware/PothosCore/wiki/Downloads)
+installed on your machine, which provides support libraries for various SDR
+hardware and SoapySDR. For the exact list of dependencies required, see the
+[CI
+configuration](https://github.com/Netdex/hackrf_sna/blob/master/.github/workflows/cmake.yml).
 
 To build, execute the following commands:
 ```bash
