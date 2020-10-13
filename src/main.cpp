@@ -99,7 +99,7 @@ int main(int, char* argv[]) {
 
   sna::DevicePicker device_picker;
   sna::SnaWorkspace dockspace;
-  dockspace.RegisterEventHandler<sna::Event::Cancelled, sna::CancelledEvent>(
+  dockspace.RegisterEventHandler<sna::CancelledEvent>(
       [window](const sna::CancelledEvent event) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
       });

@@ -33,17 +33,17 @@ class EventDispatcher {
    * @tparam Handler A functor type of void(const TEvent&)
    * @param handler A functor of type Handler
    */
-  template <EventType type, typename TEvent, typename Handler>
+  template <typename TEvent, typename Handler>
   void RegisterEventHandler(Handler&& handler) {
+    // Create a dummy instance to get the type ID. This is non-optimal for large
+    // event structures, but event handlers should seldom be registered so it
+    // should not be a big issue. Optimally, we would modify event structures to
+    // store a static type for the event ID.
+    EventType type = TEvent().type;
     // Unnecessary copy in handler capture
     queue_.appendListener(type, [handler](const std::unique_ptr<Event>& e) {
       // Call handler with unwrapped event
-      try {
-        handler(*dynamic_cast<const TEvent*>(e.get()));
-      } catch (const std::bad_cast&) {
-        LOG(ERROR) << "Ignoring event registration for type '"
-                   << typeid(TEvent).name() << "' from event ID " << type;
-      }
+      handler(*dynamic_cast<const TEvent*>(e.get()));
     });
   }
 

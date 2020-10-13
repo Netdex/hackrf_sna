@@ -23,7 +23,7 @@ void DebugPrintDeviceList(const SoapySDR::KwargsList& device_list) {
 
 DevicePicker::DevicePicker() : ImGuiWindow("Device List", true, false) {
   using namespace std::placeholders;
-  RegisterEventHandler<Event::DevicesEnumerated, DevicesEnumeratedEvent>(
+  RegisterEventHandler<DevicesEnumeratedEvent>(
       std::bind(&DevicePicker::OnDevicesEnumerated, this, _1));
 
   EnumerateDevices();

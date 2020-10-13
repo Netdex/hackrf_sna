@@ -12,6 +12,9 @@ using EventType = int;
 class Event {
  public:
   // Cross-Dispatch Event Table
+  // Unfortunately we need to globally define all events that exist in the
+  // application, since we allow dispatching events across multiple dispatchers
+  // and they need to agree on event IDs.
   enum : EventType {
     // Generic
     Cancelled,
