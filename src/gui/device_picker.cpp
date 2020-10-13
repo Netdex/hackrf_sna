@@ -29,7 +29,7 @@ DevicePicker::DevicePicker() : ImGuiWindow("Device List", true, false) {
   EnumerateDevices();
 }
 
-void DevicePicker::OnDraw() {
+void DevicePicker::Draw() {
   {
     ImGui::ScopedDisable scoped_disable{pending_enumerate_};
 
@@ -73,7 +73,8 @@ void DevicePicker::OnDraw() {
   ImGui::SetItemDefaultFocus();
   ImGui::SameLine();
   if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-    Dispatch(CancelledEvent());
+    // Dispatch(CancelledEvent());
+    Finished();
     ImGui::CloseCurrentPopup();
   }
 }

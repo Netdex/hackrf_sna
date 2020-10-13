@@ -14,7 +14,7 @@ class ImGuiDockSpace : public ImGuiComponent {
         window_flags_(window_flags | ImGuiWindowFlags_NoDocking),
         dockspace_flags_(dockspace_flags) {}
 
-  void Process() override;
+  void Process() final override;
 
  private:
   bool fullscreen_;

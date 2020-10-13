@@ -4,9 +4,11 @@ target_sources(
           gui/device_picker.h
           gui/device_picker.cpp
           gui/imgui_component.h
+          gui/imgui_component.cpp
           gui/imgui_disable.h
           gui/imgui_dockspace.h
           gui/imgui_dockspace.cpp
+          gui/imgui_functor.h
           gui/imgui_progress.h
           gui/imgui_window.h
           gui/imgui_window.cpp

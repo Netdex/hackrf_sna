@@ -14,11 +14,12 @@ EVENTPP_MAKE_EVENT(DeviceSelectedEvent,
                    Event,
                    (),
                    (SoapySDR::Kwargs, GetDevice));
+
 class DevicePicker : public ImGuiWindow {
  public:
   explicit DevicePicker();
 
-  virtual void OnDraw() override;
+  void Draw() override;
 
   void EnumerateDevices();
   void OnDevicesEnumerated(const DevicesEnumeratedEvent&);

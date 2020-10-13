@@ -14,13 +14,10 @@ class ImGuiWindow : public ImGuiComponent {
               ImGuiWindowFlags flags = ImGuiWindowFlags_None |
                                        ImGuiWindowFlags_AlwaysAutoResize);
 
-  ImGuiWindow(const ImGuiWindow&) = delete;
-  ImGuiWindow& operator=(const ImGuiWindow&) = delete;
-
-  void Process() override;
+  void Process() final override;
 
   void Show(bool visible = true) { p_open_ = visible; }
-  void ShowModal() const { ImGui::OpenPopup(title_.c_str()); }
+  void ShowModal() { open_modal_ = true; }
 
  private:
   std::string title_;
@@ -29,5 +26,6 @@ class ImGuiWindow : public ImGuiComponent {
   ImGuiWindowFlags flags_;
 
   bool p_open_ = true;
+  bool open_modal_ = false;
 };
 }  // namespace sna

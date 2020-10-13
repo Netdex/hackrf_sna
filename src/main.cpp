@@ -7,6 +7,7 @@
 #include <implot.h>
 
 #include "gui/device_picker.h"
+#include "gui/imgui_functor.h"
 #include "gui/sna_workspace.h"
 #include "util/config.h"
 
@@ -16,7 +17,7 @@ static void glfw_error_callback(int error, const char* description) {
 
 int main(int, char* argv[]) {
   google::InitGoogleLogging(argv[0]);
-  google::InstallFailureSignalHandler();
+  // google::InstallFailureSignalHandler();
   FLAGS_logtostderr = true;
   FLAGS_colorlogtostderr = true;
   FLAGS_minloglevel = 0;
@@ -97,10 +98,48 @@ int main(int, char* argv[]) {
   bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-  sna::DevicePicker device_picker;
+  auto device_picker = std::make_shared<sna::DevicePicker>();
+  auto demo_window =
+      std::make_shared<sna::ImGuiFunctor>([&](sna::ImGuiFunctor&) {
+        if (show_demo_window) {
+          ImGui::ShowDemoWindow(&show_demo_window);
+          ImPlot::ShowDemoWindow(&show_demo_window);
+        }
+
+        {
+          static float f = 0.0f;
+          ImGui::Begin("Hello, world!");
+          ImGui::Text("This is some useful text.");
+          ImGui::Checkbox("Demo Window", &show_demo_window);
+          ImGui::Checkbox("Another Window", &show_another_window);
+          ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+          ImGui::ColorEdit3("clear color", (float*)&clear_color);
+
+          if (ImGui::Button("Button")) {
+            device_picker->ShowModal();
+          }
+
+          ImGui::SameLine();
+          ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                      1000.0f / ImGui::GetIO().Framerate,
+                      ImGui::GetIO().Framerate);
+          ImGui::End();
+        }
+
+        if (show_another_window) {
+          ImGui::Begin("Another Window", &show_another_window);
+
+          ImGui::Text("Hello from another window!");
+          if (ImGui::Button("Close Me"))
+            show_another_window = false;
+          ImGui::End();
+        }
+      });
+
   sna::SnaWorkspace dockspace;
+  dockspace.AddChildren({device_picker, demo_window});
   dockspace.RegisterEventHandler<sna::CancelledEvent>(
-      [window](const sna::CancelledEvent event) {
+      [window](const sna::CancelledEvent&) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
       });
 
@@ -112,40 +151,6 @@ int main(int, char* argv[]) {
     ImGui::NewFrame();
 
     dockspace.Process();
-
-    if (show_demo_window) {
-      ImGui::ShowDemoWindow(&show_demo_window);
-      ImPlot::ShowDemoWindow(&show_demo_window);
-    }
-
-    {
-      static float f = 0.0f;
-      ImGui::Begin("Hello, world!");
-      ImGui::Text("This is some useful text.");
-      ImGui::Checkbox("Demo Window", &show_demo_window);
-      ImGui::Checkbox("Another Window", &show_another_window);
-      ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-      ImGui::ColorEdit3("clear color", (float*)&clear_color);
-
-      if (ImGui::Button("Button")) {
-        device_picker.ShowModal();
-      }
-      device_picker.Process();
-
-      ImGui::SameLine();
-      ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                  1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-      ImGui::End();
-    }
-
-    if (show_another_window) {
-      ImGui::Begin("Another Window", &show_another_window);
-
-      ImGui::Text("Hello from another window!");
-      if (ImGui::Button("Close Me"))
-        show_another_window = false;
-      ImGui::End();
-    }
 
     ImGui::Render();
     int display_w, display_h;

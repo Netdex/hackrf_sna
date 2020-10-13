@@ -6,6 +6,6 @@ namespace sna {
 
 class SnaWorkspace : public ImGuiDockSpace {
  public:
-  void OnDraw() override;
+  void Draw() override;
 };
 }  // namespace sna
