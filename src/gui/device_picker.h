@@ -6,9 +6,9 @@
 
 namespace sna {
 
-class SdrPicker : public ImGuiWindow {
+class DevicePicker : public ImGuiWindow {
  public:
-  explicit SdrPicker();
+  explicit DevicePicker();
 
   virtual void OnDraw() override;
 

@@ -11,7 +11,17 @@ using EventType = int;
 
 class Event {
  public:
-  enum : EventType { Cancelled, DevicesEnumerated, DeviceSelected, Count };
+  // Cross-Dispatch Event Table
+  enum : EventType {
+    // Generic
+    Cancelled,
+
+    // DevicePicker
+    DevicesEnumerated,
+    DeviceSelected,
+
+    Count
+  };
 
   Event(EventType type) : type(type) {}
   virtual ~Event() = default;
@@ -20,6 +30,7 @@ class Event {
 };
 
 EVENTPP_MAKE_EMPTY_EVENT(CancelledEvent, Event, Cancelled);
+
 EVENTPP_MAKE_EVENT(DevicesEnumeratedEvent,
                    Event,
                    DevicesEnumerated,

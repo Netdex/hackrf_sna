@@ -12,14 +12,16 @@
 
 namespace sna {
 
-struct EventPolicy {
-  static EventType getEvent(const std::unique_ptr<Event>& e) { return e->type; }
-};
-
-using EventQueue = eventpp::
-    EventQueue<EventType, void(const std::unique_ptr<Event>&), EventPolicy>;
-
 class EventDispatcher {
+  struct EventPolicy {
+    static EventType getEvent(const std::unique_ptr<Event>& e) {
+      return e->type;
+    }
+  };
+
+  using EventQueue = eventpp::
+      EventQueue<EventType, void(const std::unique_ptr<Event>&), EventPolicy>;
+
  public:
   virtual ~EventDispatcher() = default;
 
@@ -36,14 +38,26 @@ class EventDispatcher {
     // Unnecessary copy in handler capture
     queue_.appendListener(type, [handler](const std::unique_ptr<Event>& e) {
       // Call handler with unwrapped event
-      handler(*dynamic_cast<const TEvent*>(e.get()));
+      try {
+        handler(*dynamic_cast<const TEvent*>(e.get()));
+      } catch (const std::bad_cast&) {
+        LOG(ERROR) << "Ignoring event registration for type '"
+                   << typeid(TEvent).name() << "' from event ID " << type;
+      }
     });
   }
 
+  /**
+   * @brief Queue an event for dispatch in the event queue.
+   * This method is thread-safe.
+   *
+   * @tparam TEvent The type of the event derived from Event
+   * @param event The event to queue for dispatch
+   */
   template <typename TEvent>
-  void Dispatch(const TEvent& event) {
-    queue_.enqueue(
-        static_cast<std::unique_ptr<Event>>(std::make_unique<TEvent>(event)));
+  void Dispatch(TEvent&& event) {
+    queue_.enqueue(static_cast<std::unique_ptr<Event>>(
+        std::make_unique<TEvent>(std::forward<TEvent>(event))));
   }
 
   /**
@@ -57,13 +71,9 @@ class EventDispatcher {
   template <typename Functor, typename... Args>
   void BeginDispatch(Functor&& invoker, Args&&... args) {
     std::thread(
-        [&queue = queue_](Functor&& invoker, Args&&... args) {
-          // Invoke functor and obtain event
-          auto event =
-              std::forward<Functor>(invoker)(std::forward<Args>(args)...);
-          // Enqueue event wrapped in std::unique_ptr<Event>
-          queue.enqueue(static_cast<std::unique_ptr<Event>>(
-              std::make_unique<decltype(event)>(std::move(event))));
+        [this](Functor&& invoker, Args&&... args) {
+          // Perform thread-safe dispatch
+          Dispatch(std::forward<Functor>(invoker)(std::forward<Args>(args)...));
         },
         std::forward<Functor>(invoker), std::forward<Args>(args)...)
         .detach();

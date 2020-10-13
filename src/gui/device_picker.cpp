@@ -1,4 +1,4 @@
-#include "gui/sdr_picker.h"
+#include "gui/device_picker.h"
 
 #include <sstream>
 
@@ -20,15 +20,16 @@ void DebugPrintDeviceList(const SoapySDR::KwargsList& device_list) {
   }
 }
 }  // namespace
-SdrPicker::SdrPicker() : ImGuiWindow("Device List", true, false) {
+
+DevicePicker::DevicePicker() : ImGuiWindow("Device List", true, false) {
   using namespace std::placeholders;
   RegisterEventHandler<Event::DevicesEnumerated, DevicesEnumeratedEvent>(
-      std::bind(&SdrPicker::OnDevicesEnumerated, this, _1));
+      std::bind(&DevicePicker::OnDevicesEnumerated, this, _1));
 
   EnumerateDevices();
-}  // namespace sna
+}
 
-void SdrPicker::OnDraw() {
+void DevicePicker::OnDraw() {
   {
     ImGui::ScopedDisable scoped_disable{pending_enumerate_};
 
@@ -77,7 +78,7 @@ void SdrPicker::OnDraw() {
   }
 }
 
-void SdrPicker::EnumerateDevices() {
+void DevicePicker::EnumerateDevices() {
   DCHECK(!pending_enumerate_);
   pending_enumerate_ = true;
   device_list_.clear();
@@ -87,7 +88,7 @@ void SdrPicker::EnumerateDevices() {
       []() { return DevicesEnumeratedEvent(SoapySDR::Device::enumerate()); });
 }
 
-void SdrPicker::OnDevicesEnumerated(const DevicesEnumeratedEvent& e) {
+void DevicePicker::OnDevicesEnumerated(const DevicesEnumeratedEvent& e) {
   device_list_ = e.GetDevices();
   device_desc_.clear();
   selected_device_idx_ = 0;
@@ -95,14 +96,12 @@ void SdrPicker::OnDevicesEnumerated(const DevicesEnumeratedEvent& e) {
     device_desc_.push_back(GetDeviceDescription(device));
   }
   pending_enumerate_ = false;
-
-  DebugPrintDeviceList(device_list_);
 }
 
-std::string SdrPicker::GetDeviceDescription(const SoapySDR::Kwargs& device) {
+std::string DevicePicker::GetDeviceDescription(const SoapySDR::Kwargs& device) {
   std::stringstream ss;
-  ss << get_or(device, "label", "<unnamed device>") << " ("
-     << get_or(device, "driver", "<no driver>") << ")";
+  ss << find_or(device, "label", "<unnamed device>") << " ("
+     << find_or(device, "driver", "<no driver>") << ")";
   return ss.str();
 }
 

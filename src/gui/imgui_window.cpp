@@ -12,7 +12,7 @@ ImGuiWindow::ImGuiWindow(std::string title,
       flags_(flags) {}
 
 void ImGuiWindow::Process() {
-  ProcessEvents();
+  ImGuiComponent::Process();
   if (!p_open_)
     return;
   if (modal_) {

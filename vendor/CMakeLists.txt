@@ -18,6 +18,7 @@ set(GLFW_INSTALL
     CACHE INTERNAL "")
 add_subdirectory(glfw)
 target_include_directories(glfw SYSTEM PUBLIC glfw/include/)
+target_compile_definitions(glfw INTERFACE -DGLFW_INCLUDE_NONE)
 
 # glad
 add_library(glad glad/include/glad/glad.h glad/src/glad.c)

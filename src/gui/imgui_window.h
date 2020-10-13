@@ -2,13 +2,11 @@
 
 #include <string>
 
-#include <imgui.h>
-
-#include "util/event_dispatcher.h"
+#include "gui/imgui_component.h"
 
 namespace sna {
 
-class ImGuiWindow : public EventDispatcher {
+class ImGuiWindow : public ImGuiComponent {
  public:
   ImGuiWindow(std::string title,
               bool modal = false,
@@ -19,17 +17,16 @@ class ImGuiWindow : public EventDispatcher {
   ImGuiWindow(const ImGuiWindow&) = delete;
   ImGuiWindow& operator=(const ImGuiWindow&) = delete;
 
-  virtual void OnDraw() {}
-  void Process();
+  void Process() override;
 
   void Show(bool visible = true) { p_open_ = visible; }
   void ShowModal() const { ImGui::OpenPopup(title_.c_str()); }
 
  private:
   std::string title_;
-  ImGuiWindowFlags flags_;
   bool modal_;
   bool closeable_;
+  ImGuiWindowFlags flags_;
 
   bool p_open_ = true;
 };

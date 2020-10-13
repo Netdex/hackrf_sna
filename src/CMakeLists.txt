@@ -1,23 +1,30 @@
 target_sources(
   ${PROJECT_NAME}
   PRIVATE main.cpp
+          gui/device_picker.h
+          gui/device_picker.cpp
+          gui/imgui_component.h
+          gui/imgui_disable.h
+          gui/imgui_dockspace.h
+          gui/imgui_dockspace.cpp
+          gui/imgui_progress.h
+          gui/imgui_window.h
+          gui/imgui_window.cpp
+          gui/sna_workspace.h
+          gui/sna_workspace.cpp
           radio/sdr_sink.h
           radio/sdr_sink.cpp
           radio/sdr_source.h
           radio/sdr_source.cpp
           util/config.h
           util/config.cpp
+          util/event.h
+          util/event_dispatcher.h
+          util/stl_helper.h
           wrapper/soapysdr_wrapper.h
-          wrapper/soapysdr_wrapper.cpp
-          gui/imgui_window.h
-          gui/imgui_window.cpp
-          gui/sdr_picker.h
-          gui/sdr_picker.cpp)
+          wrapper/soapysdr_wrapper.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_definitions(
-  ${PROJECT_NAME} PUBLIC -DGLFW_INCLUDE_NONE
-                         -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 if(MSVC)
   target_compile_options(
