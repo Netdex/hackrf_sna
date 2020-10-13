@@ -6,6 +6,14 @@
 
 namespace sna {
 
+EVENTPP_MAKE_EVENT(DevicesEnumeratedEvent,
+                   Event,
+                   (),
+                   (SoapySDR::KwargsList, GetDevices));
+EVENTPP_MAKE_EVENT(DeviceSelectedEvent,
+                   Event,
+                   (),
+                   (SoapySDR::Kwargs, GetDevice));
 class DevicePicker : public ImGuiWindow {
  public:
   explicit DevicePicker();

@@ -2,10 +2,10 @@
 
 #include "gui/imgui_dockspace.h"
 
-namespace sna{
+namespace sna {
 
-class SnaWorkspace : public ImGuiDockSpace{
-    public:
-    void OnDraw() override;
+class SnaWorkspace : public ImGuiDockSpace {
+ public:
+  void OnDraw() override;
 };
-}
+}  // namespace sna

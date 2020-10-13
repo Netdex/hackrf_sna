@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 #include <thread>
+#include <typeindex>
 
 #include <eventpp/eventqueue.h>
 #include <eventpp/utilities/eventmaker.h>
@@ -14,13 +15,14 @@ namespace sna {
 
 class EventDispatcher {
   struct EventPolicy {
-    static EventType getEvent(const std::unique_ptr<Event>& e) {
-      return e->type;
+    static std::type_index getEvent(const std::unique_ptr<Event>& e) {
+      return std::type_index(typeid(*e));
     }
   };
 
-  using EventQueue = eventpp::
-      EventQueue<EventType, void(const std::unique_ptr<Event>&), EventPolicy>;
+  using EventQueue = eventpp::EventQueue<std::type_index,
+                                         void(const std::unique_ptr<Event>&),
+                                         EventPolicy>;
 
  public:
   virtual ~EventDispatcher() = default;
@@ -35,16 +37,12 @@ class EventDispatcher {
    */
   template <typename TEvent, typename Handler>
   void RegisterEventHandler(Handler&& handler) {
-    // Create a dummy instance to get the type ID. This is non-optimal for large
-    // event structures, but event handlers should seldom be registered so it
-    // should not be a big issue. Optimally, we would modify event structures to
-    // store a static type for the event ID.
-    EventType type = TEvent().type;
     // Unnecessary copy in handler capture
-    queue_.appendListener(type, [handler](const std::unique_ptr<Event>& e) {
-      // Call handler with unwrapped event
-      handler(*dynamic_cast<const TEvent*>(e.get()));
-    });
+    queue_.appendListener(std::type_index(typeid(TEvent)),
+                          [handler](const std::unique_ptr<Event>& e) {
+                            // Call handler with unwrapped event
+                            handler(*dynamic_cast<const TEvent*>(e.get()));
+                          });
   }
 
   /**
