@@ -68,14 +68,14 @@ void DevicePicker::Draw() {
     if (ImGui::Button("OK", ImVec2(120, 0))) {
       Dispatch(DeviceSelectedEvent(device_list_.at(selected_device_idx_)));
       ImGui::CloseCurrentPopup();
+      Finish();
     }
   }
   ImGui::SetItemDefaultFocus();
   ImGui::SameLine();
   if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-    // Dispatch(CancelledEvent());
-    Finished();
     ImGui::CloseCurrentPopup();
+    Finish();
   }
 }
 

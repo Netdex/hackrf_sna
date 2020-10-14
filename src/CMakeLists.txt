@@ -20,7 +20,6 @@ target_sources(
           radio/sdr_source.cpp
           util/config.h
           util/config.cpp
-          util/event.h
           util/event_dispatcher.h
           util/stl_helper.h
           wrapper/soapysdr_wrapper.h

@@ -29,7 +29,7 @@ class ImGuiComponent : public EventDispatcher {
   void RemoveChild(std::shared_ptr<ImGuiComponent> child);
 
  protected:
-  void Finished();
+  void Finish();
 
  private:
   // Use a list, since we mutate during iteration

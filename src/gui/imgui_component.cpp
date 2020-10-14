@@ -1,14 +1,15 @@
 #include "gui/imgui_component.h"
 
 #include <algorithm>
+#include <functional>
 
 namespace sna {
 
 void ImGuiComponent::Process() {
   ProcessEvents();
-  for (const auto& child : children_) {
-    child->Process();
-  }
+  using namespace std::placeholders;
+  std::for_each(children_.begin(), children_.end(),
+                std::bind(&ImGuiComponent::Process, _1));
 }
 
 void ImGuiComponent::AddChild(std::shared_ptr<ImGuiComponent> child) {
@@ -30,7 +31,7 @@ void ImGuiComponent::RemoveChild(std::shared_ptr<ImGuiComponent> child) {
                   children_.end());
 }
 
-void ImGuiComponent::Finished() {
+void ImGuiComponent::Finish() {
   Dispatch(ComponentFinishedEvent());
 }
 

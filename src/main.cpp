@@ -6,7 +6,6 @@
 #include <imgui_impl_opengl3.h>
 #include <implot.h>
 
-#include "gui/device_picker.h"
 #include "gui/imgui_functor.h"
 #include "gui/sna_workspace.h"
 #include "util/config.h"
@@ -98,7 +97,6 @@ int main(int, char* argv[]) {
   bool show_another_window = false;
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-  auto device_picker = std::make_shared<sna::DevicePicker>();
   auto demo_window =
       std::make_shared<sna::ImGuiFunctor>([&](sna::ImGuiFunctor&) {
         if (show_demo_window) {
@@ -116,7 +114,6 @@ int main(int, char* argv[]) {
           ImGui::ColorEdit3("clear color", (float*)&clear_color);
 
           if (ImGui::Button("Button")) {
-            device_picker->ShowModal();
           }
 
           ImGui::SameLine();
@@ -137,9 +134,9 @@ int main(int, char* argv[]) {
       });
 
   sna::SnaWorkspace dockspace;
-  dockspace.AddChildren({device_picker, demo_window});
-  dockspace.RegisterEventHandler<sna::CancelledEvent>(
-      [window](const sna::CancelledEvent&) {
+  dockspace.AddChildren({demo_window});
+  dockspace.RegisterEventHandler<sna::ComponentFinishedEvent>(
+      [window](const sna::ComponentFinishedEvent&) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
       });
 

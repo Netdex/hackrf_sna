@@ -9,9 +9,12 @@
 #include <eventpp/utilities/eventmaker.h>
 #include <glog/logging.h>
 
-#include "util/event.h"
-
 namespace sna {
+
+class Event {
+ public:
+  virtual ~Event() = default;
+};
 
 class EventDispatcher {
   struct EventPolicy {

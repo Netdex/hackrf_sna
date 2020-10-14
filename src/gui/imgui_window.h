@@ -17,7 +17,6 @@ class ImGuiWindow : public ImGuiComponent {
   void Process() final override;
 
   void Show(bool visible = true) { p_open_ = visible; }
-  void ShowModal() { open_modal_ = true; }
 
  private:
   std::string title_;
@@ -26,6 +25,6 @@ class ImGuiWindow : public ImGuiComponent {
   ImGuiWindowFlags flags_;
 
   bool p_open_ = true;
-  bool open_modal_ = false;
+  bool open_modal_ = true;
 };
 }  // namespace sna
