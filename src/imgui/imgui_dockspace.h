@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/imgui_component.h"
+#include "imgui/imgui_component.h"
 
 namespace sna {
 class ImGuiDockSpace : public ImGuiComponent {

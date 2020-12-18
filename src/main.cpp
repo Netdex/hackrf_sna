@@ -6,7 +6,7 @@
 #include <imgui_impl_opengl3.h>
 #include <implot.h>
 
-#include "gui/imgui_functor.h"
+#include "imgui/imgui_functor.h"
 #include "gui/sna_workspace.h"
 #include "util/config.h"
 

@@ -3,17 +3,17 @@ target_sources(
   PRIVATE main.cpp
           gui/device_picker.h
           gui/device_picker.cpp
-          gui/imgui_component.h
-          gui/imgui_component.cpp
-          gui/imgui_disable.h
-          gui/imgui_dockspace.h
-          gui/imgui_dockspace.cpp
-          gui/imgui_functor.h
-          gui/imgui_progress.h
-          gui/imgui_window.h
-          gui/imgui_window.cpp
           gui/sna_workspace.h
           gui/sna_workspace.cpp
+          imgui/imgui_component.h
+          imgui/imgui_component.cpp
+          imgui/imgui_disable.h
+          imgui/imgui_dockspace.h
+          imgui/imgui_dockspace.cpp
+          imgui/imgui_functor.h
+          imgui/imgui_progress.h
+          imgui/imgui_window.h
+          imgui/imgui_window.cpp
           radio/sdr_sink.h
           radio/sdr_sink.cpp
           radio/sdr_source.h

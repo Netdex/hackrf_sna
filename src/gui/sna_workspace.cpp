@@ -1,6 +1,7 @@
 #include "gui/sna_workspace.h"
 
 #include "gui/device_picker.h"
+#include "wrapper/soapysdr_wrapper.h"
 
 namespace sna {
 
@@ -22,6 +23,27 @@ void SnaWorkspace::Draw() {
         device_picker->RegisterEventHandler<DeviceSelectedEvent>(
             [](const DeviceSelectedEvent& event) {
               LOG(INFO) << event.GetDevice().at("label");
+
+              sdr::Device device(event.GetDevice());
+              size_t rx_count =
+                  device.GetChannelCount(sdr::Direction::kReceive);
+              size_t tx_count =
+                  device.GetChannelCount(sdr::Direction::kTransmit);
+              LOG(INFO) << "rx=" << rx_count << ", tx=" << tx_count;
+              for (size_t i = 0; i < rx_count; ++i) {
+                auto kwargs =
+                    device.GetChannelInfo(sdr::Direction::kReceive, i);
+                for (const auto& [key, value] : kwargs) {
+                  LOG(INFO) << key << "=" << value;
+                }
+              }
+              for (size_t i = 0; i < tx_count; ++i) {
+                auto kwargs =
+                    device.GetChannelInfo(sdr::Direction::kTransmit, i);
+                for (const auto& [key, value] : kwargs) {
+                  LOG(INFO) << key << "=" << value;
+                }
+              }
             });
         AddChild(device_picker);
       }

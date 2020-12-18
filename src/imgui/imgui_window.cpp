@@ -1,4 +1,4 @@
-#include "gui/imgui_window.h"
+#include "imgui/imgui_window.h"
 
 namespace sna {
 

@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "gui/imgui_component.h"
+#include "imgui/imgui_component.h"
 
 namespace sna {
 class ImGuiFunctor : public ImGuiComponent {

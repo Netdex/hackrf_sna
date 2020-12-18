@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/imgui_dockspace.h"
+#include "imgui/imgui_dockspace.h"
 
 namespace sna {
 

@@ -1,4 +1,4 @@
-#include "gui/imgui_component.h"
+#include "imgui/imgui_component.h"
 
 #include <algorithm>
 #include <functional>
@@ -7,9 +7,12 @@ namespace sna {
 
 void ImGuiComponent::Process() {
   ProcessEvents();
-  using namespace std::placeholders;
-  std::for_each(children_.begin(), children_.end(),
-                std::bind(&ImGuiComponent::Process, _1));
+  auto it = children_.begin();
+  while (it != children_.end()) {
+    auto& child = *it;
+    ++it;
+    child->Process();
+  }
 }
 
 void ImGuiComponent::AddChild(std::shared_ptr<ImGuiComponent> child) {

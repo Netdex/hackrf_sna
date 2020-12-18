@@ -8,7 +8,7 @@ hackrf_sna.toml
 
 # CMake
 /build
-/out
+/linux
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

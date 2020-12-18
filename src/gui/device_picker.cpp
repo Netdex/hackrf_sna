@@ -4,22 +4,11 @@
 
 #include <glog/logging.h>
 
-#include "gui/imgui_disable.h"
-#include "gui/imgui_progress.h"
+#include "imgui/imgui_disable.h"
+#include "imgui/imgui_progress.h"
 #include "util/stl_helper.h"
 
 namespace sna {
-namespace {
-void DebugPrintDeviceList(const SoapySDR::KwargsList& device_list) {
-  int i = 0;
-  for (const auto& device : device_list) {
-    LOG(INFO) << "Device " << ++i;
-    for (const auto& [key, value] : device) {
-      LOG(INFO) << "\t" << key << "=" << value;
-    }
-  }
-}
-}  // namespace
 
 DevicePicker::DevicePicker() : ImGuiWindow("Device List", true, false) {
   using namespace std::placeholders;
