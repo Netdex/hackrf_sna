@@ -3,6 +3,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
 set(VENDOR_DIR ${PROJECT_SOURCE_DIR}/vendor)
 
+# marl
+add_subdirectory(marl)
+
 # glfw
 set(GLFW_BUILD_DOCS
     OFF
@@ -103,7 +106,8 @@ find_package(SoapySDR "0.4.0" CONFIG REQUIRED)
 
 target_link_libraries(
   ${PROJECT_NAME}
-  PUBLIC glfw
+  PUBLIC marl
+         glfw
          glad
          imgui
          implot

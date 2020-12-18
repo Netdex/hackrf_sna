@@ -28,3 +28,6 @@
 [submodule "vendor/eventpp"]
 	path = vendor/eventpp
 	url = https://github.com/wqking/eventpp.git
+[submodule "vendor/marl"]
+	path = vendor/marl
+	url = git@github.com:google/marl.git
